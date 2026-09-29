@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/add/add_page.dart';
+import 'package:todo_list/settings/settings_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -16,9 +17,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF2F2F7),
       appBar: AppBar(
-        backgroundColor:  Colors.white,
+        backgroundColor: const Color(0xFFF2F2F7),
         elevation: 0,
         centerTitle: true,
         title: Text(
@@ -28,11 +29,17 @@ class _MyHomePageState extends State<MyHomePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings_outlined, color: Colors.black),
+            onPressed: _onSettingsTap,
+          ),
+        ],
       ),
-      body: Center(
+      body: SafeArea(
         child: Column(
           children: [
-           
             Expanded(
               child: tasks.isEmpty
                   ? const Center(
@@ -64,7 +71,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
             ),
-            
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: SizedBox(
@@ -98,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _onAddTap() async {
-    final result = await Navigator.of(context).push(
+    final result = await Navigator.of(context).push<String>(
       MaterialPageRoute(
         builder: (_) => const AddPage(),
       ),
@@ -109,5 +115,14 @@ class _MyHomePageState extends State<MyHomePage> {
         tasks.insert(0, result);
       });
     }
+  }
+
+  
+  void _onSettingsTap() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const SettingsPage(),
+      ),
+    );
   }
 }
