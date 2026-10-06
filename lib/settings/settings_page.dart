@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+  final bool isDarkTheme;
+  final Function(bool) onThemeChanget;
+  const SettingsPage({super.key, required this.isDarkTheme, required this.onThemeChanget});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -9,22 +12,28 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
  
-  bool isDarkTheme = false;
+  bool _isDarkTheme = false;
 
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _isDarkTheme = widget.isDarkTheme;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       
-      backgroundColor: isDarkTheme ? Colors.black : Colors.white,
+      backgroundColor: _isDarkTheme ? Colors.black : Colors.white,
       appBar: AppBar(
-        backgroundColor: isDarkTheme ? Colors.black : Colors.white,
+        backgroundColor: _isDarkTheme ? Colors.black : Colors.white,
         elevation: 0,
         centerTitle: true,
         
         title: Text(
           'Настройки',
           style: TextStyle(
-            color: isDarkTheme ? Colors.white : Colors.black,
+            color: _isDarkTheme ? Colors.white : Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -74,12 +83,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     
                     Switch(
-                      value: isDarkTheme,
+                      value: _isDarkTheme,
                       activeColor: Colors.blue,
                       onChanged: (value) {
                         setState(() {
-                          isDarkTheme = value;
+                          _isDarkTheme = value;
                         });
+                        saveTheme();
+                        widget.onThemeChanget(value);
                       },
                     ),
                   ],
@@ -90,5 +101,10 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+
+  Future<void> saveTheme()async{
+    final preferences = await SharedPreferences.getInstance();//достали обьект настроек (файл)
+    preferences.setBool('isDarkTheme', _isDarkTheme);
   }
 }

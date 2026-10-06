@@ -10,7 +10,10 @@ import 'package:todo_list/settings/settings_page.dart';
 
 class MyHomePage extends StatefulWidget {
   final HomeCubit cubit;
-  const MyHomePage({super.key, required this.cubit});
+  final bool isDarkTheme;
+  final Function(bool) onThemeChanget;
+
+  const MyHomePage({super.key, required this.cubit, required this.isDarkTheme, required this.onThemeChanget});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -157,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onSettingsTap() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => const SettingsPage(),
+        builder: (_) => SettingsPage(isDarkTheme: widget.isDarkTheme, onThemeChanget: widget.onThemeChanget,),
       ),
     );
   }
